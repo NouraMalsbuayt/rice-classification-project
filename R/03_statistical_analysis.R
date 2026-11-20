@@ -88,3 +88,33 @@ t_test_results$Adjusted_P_Value <- p.adjust(
 
 # Displaying the final statistical results
 print(t_test_results)
+
+
+
+# Variance, Normality (Q-Q Plot) & Wilcoxon Check
+# Research hypotheses, test selection and assumptions
+
+# 1. Examining the variance for each numerical type, grouped by category
+# Note: Numerical values only, excluding the 'Class' column
+numeric_cols <- rice_data %>% select(where(is.numeric)) %>% names()
+
+variance_by_class <- rice_data %>%
+  group_by(Class) %>%
+  summarise(across(all_of(numeric_cols), list(mean = mean, sd = sd, var = var)))
+
+print(variance_by_class)
+
+# 2. Visually examining the distribution (normality) using Q-Q plots
+ggplot(rice_data, aes(sample = Area, color = Class)) +
+  stat_qq() +
+  stat_qq_line() +
+  facet_wrap(~Class) +
+  labs(title = "Q-Q Plots for Area by Rice Variety") +
+  theme_minimal()
+
+# 3. Applying Welch Two-Sample t-test and Wilcoxon test for 'Area'
+t_test_area <- t.test(Area ~ Class, data = rice_data)
+wilcox_area <- wilcox.test(Area ~ Class, data = rice_data)
+
+print(t_test_area)
+print(wilcox_area)
