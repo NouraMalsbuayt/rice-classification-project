@@ -74,3 +74,32 @@ ggplot(rice_long_class, aes(x = Value, color = Class, fill = Class)) +
     fill = "Rice Variety"
   ) +
   theme_minimal()
+
+
+#Summary Statistics & Class Distribution
+# 1. Extract comprehensive descriptive statistics for all numerical variables
+summary(rice_data)
+
+# 2. Analysis of rice variety distribution (Class Distribution & Percentages)
+class_counts <- table(rice_data$Class)
+print("Class Counts:")
+print(class_counts)
+
+class_percentages <- prop.table(class_counts) * 100
+print("Class Percentages (%):")
+print(class_percentages)
+
+# 3. Calculating the means and standard deviation for each feature, grouped by rice variety
+rice_summary_stats <- rice_data %>%
+  group_by(Class) %>%
+  summarise(
+    Mean_Area = mean(Area),
+    SD_Area = sd(Area),
+    Mean_Perimeter = mean(Perimeter),
+    SD_Perimeter = sd(Perimeter),
+    Mean_Major_Axis = mean(Major_Axis_Length),
+    SD_Major_Axis = sd(Major_Axis_Length)
+  )
+
+print("Summary Statistics Grouped by Rice Variety:")
+print(rice_summary_stats)
