@@ -145,6 +145,14 @@ ggplot(correlation_long, aes(x = Feature1, y = Feature2, fill = Correlation)) +
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
+ggsave(
+  filename = "figures/correlation_heatmap.png",
+  plot = last_plot(),
+  width = 10,
+  height = 8,
+  dpi = 300
+)
+
 # Scatterplot Analysis
 # Generate all 21 unique pairwise scatterplots
 # Split them into 3 figures for better readability
