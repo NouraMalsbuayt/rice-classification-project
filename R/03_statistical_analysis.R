@@ -105,9 +105,9 @@ variance_by_class <- rice_data %>%
 print(variance_by_class)
 
 # 2. Visually examining the distribution (normality) using Q-Q plots
-ggplot(rice_data, aes(sample = Area, color = Class)) +
-  stat_qq() +
-  stat_qq_line() +
+ggplot(rice_data, aes(sample = Area)) +
+  stat_qq(aes(color = Class), alpha = 0.7) +
+  stat_qq_line(color = "gray30", linewidth = 0.8) +
   facet_wrap(~Class) +
   labs(title = "Q-Q Plots for Area by Rice Variety") +
   theme_minimal()
