@@ -36,7 +36,12 @@ ggplot(rice_long, aes(x = Value)) +
   ) +
   theme_minimal()
 
-
+rice_long_class <- rice_data %>%
+  pivot_longer(
+    cols = -Class,
+    names_to = "Feature",
+    values_to = "Value"
+  )
 
 # Comparing numerical features between Cammeo and Osmancik using boxplots
 # Boxplots are used to compare numerical features
@@ -103,3 +108,110 @@ rice_summary_stats <- rice_data %>%
 
 print("Summary Statistics Grouped by Rice Variety:")
 print(rice_summary_stats)
+
+# Correlation Analysis
+# Examine linear relationships among numerical features
+
+correlation_matrix <- rice_data %>%
+  select(where(is.numeric)) %>%
+  cor(method = "pearson")
+
+print(round(correlation_matrix, 3))
+
+# Prepare correlation matrix for visualization
+correlation_long <- as.data.frame(as.table(correlation_matrix))
+
+colnames(correlation_long) <- c("Feature1", "Feature2", "Correlation")
+
+# Correlation Heatmap
+ggplot(correlation_long, aes(x = Feature1, y = Feature2, fill = Correlation)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = round(Correlation, 2)), size = 3) +
+  scale_fill_gradient2(
+    low = "blue",
+    mid = "white",
+    high = "red",
+    midpoint = 0,
+    limits = c(-1, 1)
+  ) +
+  labs(
+    title = "Correlation Heatmap of Numerical Features",
+    x = "Features",
+    y = "Features",
+    fill = "Pearson r"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+# Scatterplot Analysis
+# Generate all 21 unique pairwise scatterplots
+# Split them into 3 figures for better readability
+
+numeric_features <- names(rice_data)[sapply(rice_data, is.numeric)]
+
+scatterplot_pairs <- combn(numeric_features, 2, simplify = FALSE)
+
+scatterplot_data <- purrr::map_dfr(scatterplot_pairs, function(pair) {
+  
+  rice_data %>%
+    transmute(
+      X = .data[[pair[1]]],
+      Y = .data[[pair[2]]],
+      Class = Class,
+      Feature_Pair = paste(pair[1], "vs.", pair[2])
+    )
+  
+})
+
+# Assign each pair to one of three figures
+pair_names <- unique(scatterplot_data$Feature_Pair)
+
+scatterplot_data <- scatterplot_data %>%
+  mutate(
+    Figure = ceiling(match(Feature_Pair, pair_names) / 7),
+    Feature_Pair = factor(Feature_Pair, levels = pair_names)
+  )
+
+dir.create("figures/scatterplots", recursive = TRUE, showWarnings = FALSE)
+
+for (i in 1:3) {
+  
+  plot_data <- scatterplot_data %>%
+    filter(Figure == i) %>%
+    mutate(Feature_Pair = droplevels(Feature_Pair))
+  
+  p <- ggplot(plot_data, aes(x = X, y = Y, color = Class)) +
+    geom_point(alpha = 0.35, size = 0.7) +
+    facet_wrap(
+      ~ Feature_Pair,
+      scales = "free",
+      ncol = 2
+    ) +
+    labs(
+      title = paste("Pairwise Scatterplots - Part", i),
+      x = "Feature Value (X)",
+      y = "Feature Value (Y)",
+      color = "Rice Variety"
+    ) +
+    theme_minimal(base_size = 12) +
+    theme(
+      strip.text = element_text(size = 10, face = "bold"),
+      axis.text = element_text(size = 9),
+      panel.spacing = grid::unit(1.5, "lines"),
+      legend.position = "bottom"
+    )
+  
+  print(p)
+  
+  ggsave(
+    filename = paste0(
+      "figures/scatterplots/scatterplots_part_", i, ".png"
+    ),
+    plot = p,
+    width = 13,
+    height = 15,
+    dpi = 300
+  )
+}
