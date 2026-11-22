@@ -1,29 +1,36 @@
-# Machine learning models:
-# Building and training the logistic regression model (logit_model) after invoking 04_data_preparation.R
-#source("04_data_preparation.R")
+
+# PHASE 05: MACHINE LEARNING
+
+# Loading the prepared training and test data
 source("R/04_data_preparation.R")
-logit_model <- glm(Class ~ ., data = train_df, family = binomial(link = "logit"))
+
+
+# Logistic Regression Model
+
+# Train the logistic regression model
+logit_model <- glm(
+  Class ~ .,
+  data = train_df,
+  family = binomial(link = "logit")
+)
+
+# Display the model summary
 print(summary(logit_model))
 
+# Calculate and display odds ratios
 odds_ratios <- exp(coef(logit_model))
+
 print("Odds Ratios (Logistic Regression):")
 print(odds_ratios)
 
 
-
-
-
-
-
-
 # Random Forest Model
-install.packages("caret")
-install.packages("randomForest")
+
+# Load the required libraries
 library(caret)
 library(randomForest)
 
-# Hyperparameter Tuning using 5-Fold Cross Validation
-
+# Hyperparameter tuning using 5-fold cross-validation
 set.seed(6114)
 
 rf_control <- trainControl(
@@ -40,19 +47,14 @@ rf_model <- train(
   metric = "Accuracy"
 )
 
-# Display the best model
+# Display the model results
 print(rf_model)
 
-# Best hyperparameter
+# Display the best hyperparameter
 print(rf_model$bestTune)
 
-# Prediction on Test Data
+# Predict rice varieties using the test data
 rf_predictions <- predict(rf_model, newdata = test_df)
 
-# Model Evaluation
-confusionMatrix(rf_predictions, test_df$Class)
-
-
-print(rf_model$bestTune)
-rf_model
-print(rf_model)
+# Evaluate the Random Forest model
+print(confusionMatrix(rf_predictions, test_df$Class))

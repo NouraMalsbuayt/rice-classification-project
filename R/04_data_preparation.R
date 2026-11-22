@@ -51,3 +51,16 @@ test_prep  <- preprocess_rice(test_raw, train_ref = train_raw)
 
 train_df <- train_prep$data
 test_df  <- test_prep$data
+
+
+# Validate Z-score Standardization
+
+numeric_features <- names(train_df)[sapply(train_df, is.numeric)]
+
+scaling_validation <- data.frame(
+  Feature = numeric_features,
+  Mean_After = sapply(train_df[numeric_features], mean),
+  SD_After = sapply(train_df[numeric_features], sd)
+)
+
+print(round(scaling_validation[, c("Mean_After", "SD_After")], 6))

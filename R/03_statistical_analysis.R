@@ -1,3 +1,4 @@
+
 # PHASE 04: STATISTICAL ANALYSIS
 
 # Loading the required libraries
@@ -43,7 +44,6 @@ t_test_results <- bind_rows(t_test_results)
 print(t_test_results)
 
 
-
 # Calculating Cohen's d to measure effect size
 # Cohen's d was calculated to measure the effect size
 # of the differences between the two rice varieties.
@@ -60,7 +60,6 @@ cohen_d <- function(x, y) {
 }
 
 # Calculating effect size for each feature
-
 effect_sizes <- sapply(numerical_features, function(feature) {
   
   x <- rice_data[[feature]][rice_data$Class == "Cammeo"]
@@ -70,11 +69,9 @@ effect_sizes <- sapply(numerical_features, function(feature) {
 })
 
 # Adding effect sizes to the results table
-
 t_test_results$Cohen_d <- effect_sizes
 
 print(t_test_results)
-
 
 
 # Adjusting p-values for multiple comparisons
@@ -88,7 +85,6 @@ t_test_results$Adjusted_P_Value <- p.adjust(
 
 # Displaying the final statistical results
 print(t_test_results)
-
 
 
 # Variance, Normality (Q-Q Plot) & Wilcoxon Check
@@ -118,3 +114,60 @@ wilcox_area <- wilcox.test(Area ~ Class, data = rice_data)
 
 print(t_test_area)
 print(wilcox_area)
+
+
+# Logistic Regression Analysis
+# Coefficient Interpretation
+
+# Load the trained logistic regression model
+source("R/05_machine_learning.R")
+
+# Extract model coefficients and statistical results
+coefficient_summary <- summary(logit_model)$coefficients
+
+# Create a summary table of the regression coefficients
+logistic_results <- data.frame(
+  Feature = rownames(coefficient_summary),
+  Estimate = coefficient_summary[, "Estimate"],
+  Std_Error = coefficient_summary[, "Std. Error"],
+  Z_Value = coefficient_summary[, "z value"],
+  P_Value = coefficient_summary[, "Pr(>|z|)"],
+  Odds_Ratio = exp(coefficient_summary[, "Estimate"]),
+  row.names = NULL
+)
+
+# Display coefficient results
+print(logistic_results)
+
+# Save results for the project report
+dir.create("results", showWarnings = FALSE)
+
+write.csv(
+  logistic_results,
+  "results/logistic_regression_coefficients.csv",
+  row.names = FALSE
+)
+
+
+# Logistic Regression Diagnostics
+# Checking multicollinearity among predictors
+
+library(car)
+
+# Calculate VIF for each predictor
+vif_results <- vif(logit_model)
+
+# Display VIF results
+print(vif_results)
+
+# Save VIF results for the report
+vif_table <- data.frame(
+  Feature = names(vif_results),
+  VIF = as.numeric(vif_results)
+)
+
+write.csv(
+  vif_table,
+  "results/logistic_regression_vif.csv",
+  row.names = FALSE
+)
