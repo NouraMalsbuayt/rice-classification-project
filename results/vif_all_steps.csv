@@ -1,0 +1,26 @@
+"Iteration","Feature","VIF"
+"Original Model","Area",459.374366846763
+"Original Model","Perimeter",50.1979687338371
+"Original Model","Major_Axis_Length",129.535979826247
+"Original Model","Minor_Axis_Length",377.91191020011
+"Original Model","Eccentricity",127.414107042682
+"Original Model","Convex_Area",411.079169572956
+"Original Model","Extent",1.11728482639466
+"Step 1","Perimeter",23.1162039860246
+"Step 1","Major_Axis_Length",72.7522540125666
+"Step 1","Minor_Axis_Length",283.220545395072
+"Step 1","Eccentricity",127.709973263308
+"Step 1","Convex_Area",221.171386309617
+"Step 1","Extent",1.09800131810969
+"Step 2","Perimeter",22.3262917310726
+"Step 2","Major_Axis_Length",71.5280887096786
+"Step 2","Eccentricity",49.4933247149036
+"Step 2","Convex_Area",78.2384553552453
+"Step 2","Extent",1.08967713311109
+"Step 3","Perimeter",19.2094869095176
+"Step 3","Major_Axis_Length",23.9278568259896
+"Step 3","Eccentricity",6.62776710632465
+"Step 3","Extent",1.08563448254555
+"Step 4","Perimeter",1.01941714795825
+"Step 4","Eccentricity",1.03581549336544
+"Step 4","Extent",1.05000389314388

@@ -1,0 +1,2 @@
+"Model","Number_of_Features","Accuracy","Precision","Recall","Specificity","F1_Score","Correct_Predictions","Incorrect_Predictions"
+"Reduced Logistic Regression",3,0.9291,0.9359,0.8957,0.9541,0.9154,708,54

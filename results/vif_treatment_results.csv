@@ -1,0 +1,6 @@
+"Iteration","Removed_Feature","Remaining_Features","Maximum_VIF"
+"Original Model","None",7,459.374366846763
+"Step 1","Area",6,283.220545395072
+"Step 2","Minor_Axis_Length",5,78.2384553552453
+"Step 3","Convex_Area",4,23.9278568259896
+"Step 4","Major_Axis_Length",3,1.05000389314388

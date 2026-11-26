@@ -1,0 +1,4 @@
+"Model","AUC"
+"Original Logistic Regression",0.9797
+"Reduced Logistic Regression",0.979
+"Random Forest",0.9736

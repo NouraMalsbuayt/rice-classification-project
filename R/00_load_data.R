@@ -1,12 +1,16 @@
-
-# 1. Installing and calling the farff library
-
-install.packages("farff")
+# PHASE 01: PROJECT SETUP AND DATA LOADING
+required_packages <- c("tidyverse", "farff", "caret", "randomForest", "car", "pROC")
+for (pkg in required_packages) {
+  if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg, repos = "https://cloud.r-project.org")
+}
+library(tidyverse)
 library(farff)
-
-# 2. Reading the file
+library(caret)
+library(randomForest)
+library(car)
+library(pROC)
 rice_data <- readARFF("data/Rice_Cammeo_Osmancik.arff")
-
-# 3. Verify successful reading and display the dimensions
-dim(rice_data)
-head(rice_data)
+print(dim(rice_data))
+print(head(rice_data))
+dir.create("figures", showWarnings = FALSE)
+dir.create("results", showWarnings = FALSE)
